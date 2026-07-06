@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="400.0" prefWidth="226.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sistemaeventos.controller.RegistroController">
+   <children>
+      <TextField fx:id="txtUsuario" layoutX="39.0" layoutY="115.0" />
+      <Label layoutX="39.0" layoutY="98.0" text="Usuario" />
+      <Label layoutX="39.0" layoutY="158.0" text="Contraseña" />
+      <Label layoutX="65.0" layoutY="24.0" text="REGISTRO ">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="39.0" layoutY="229.0" text="Rol" />
+      <PasswordField fx:id="txtContrasenia" layoutX="39.0" layoutY="188.0" />
+      <ComboBox fx:id="cmbRol" layoutX="38.0" layoutY="256.0" prefWidth="150.0" />
+      <Button layoutX="81.0" layoutY="308.0" mnemonicParsing="false" onAction="#registro" text="Registrar" />
+   </children>
 </AnchorPane>

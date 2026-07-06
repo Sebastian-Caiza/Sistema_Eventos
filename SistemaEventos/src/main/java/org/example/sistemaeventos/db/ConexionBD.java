@@ -6,7 +6,8 @@ import java.sql.SQLException;
 
 public class ConexionBD {
 
-    private static String URL = "jdbc:postgresql://localhost:5432/Sistema_Evento";
+    public static Connection getConnection;
+    private static String URL = "jdbc:postgresql://localhost:5432/Eventos";
     private static String USER = "postgres";
     private static String PASSWORD = "123456";
 
@@ -22,8 +23,6 @@ public class ConexionBD {
         catch (SQLException e){
             System.out.println("Error de conexion: " + e.getMessage());
         }
-
-
     }
 
 }
