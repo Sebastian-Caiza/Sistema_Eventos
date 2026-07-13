@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
 
 public class LoginController {
 
@@ -23,20 +24,39 @@ public class LoginController {
     private Label lblMensaje;
 
     @FXML
-    public void iniciarSesion(){
+    public void iniciarSesion() {
+
 
         String usuario = txtUsuario.getText();
-        String password = txtPassword.getText();
+        String clave = txtPassword.getText();
 
-        if(usuario.isEmpty() || password.isEmpty()){
-            lblMensaje.setText("Complete todos los campos");
-        }else{
-            lblMensaje.setText("Validando usuario...");
+        if (usuario.isEmpty() || clave.isEmpty()) {
+            lblMensaje.setText("Complete los campos");
+        }
+
+        if (usuario.equals("admin") && clave.equals("admin")) {
+            abrirVentanaPrincipal();
+        } else {
+            lblMensaje.setText("Usuario o contraseña incorrectos");
+        }
+    }
+
+    private void abrirVentanaPrincipal() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/sistemaeventos/view/menu_admin.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) txtUsuario.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Gestion De Estudiantes");
+            stage.centerOnScreen();
+        } catch (Exception e) {
+            lblMensaje.setText("Error al cargar la ventana: " + e.getMessage());
         }
     }
 
     @FXML
-    public void abrirRegistro(){
+    public void abrirRegistro() {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(

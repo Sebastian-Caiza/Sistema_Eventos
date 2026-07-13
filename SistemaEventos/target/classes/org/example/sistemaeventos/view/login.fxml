@@ -11,18 +11,13 @@
 
         <Label text="Inicio de Sesión" />
 
-
         <TextField fx:id="txtUsuario" maxWidth="150.0" promptText="Usuario o correo" />
-
 
         <PasswordField fx:id="txtPassword" maxWidth="150.0" promptText="Contraseña" />
 
-
         <Button maxWidth="100.0" onAction="#iniciarSesion" prefWidth="200" text="Ingresar" />
 
-
         <Button maxWidth="100.0" onAction="#abrirRegistro" prefWidth="200" text="Registrarse" />
-
 
         <Label fx:id="lblMensaje" />
 
