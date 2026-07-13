@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane prefHeight="423.0" prefWidth="697.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CONTROLLER_NAME">
+<AnchorPane prefHeight="423.0" prefWidth="697.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sistemaeventos.controller.MenuController">
    <children>
       <Label layoutX="28.0" layoutY="16.0" text="MENU ADMINISTRADOR" />
       <AnchorPane layoutX="14.0" layoutY="53.0" prefHeight="317.0" prefWidth="256.0" style="-fx-background-color: #B8E3D8;">
