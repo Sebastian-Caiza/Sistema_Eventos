@@ -15,3 +15,15 @@ VALUES
 
 SELECT * FROM usuarios;
 
+CREATE TABLE eventos(
+id SERIAL PRIMARY KEY,
+nombre VARCHAR(100) UNIQUE NOT NULL,
+tipo VARCHAR(100),
+inicio VARCHAR(100),
+fin VARCHAR(100),
+fecha VARCHAR(100)
+
+);
+
+SELECT * FROM eventos;
+

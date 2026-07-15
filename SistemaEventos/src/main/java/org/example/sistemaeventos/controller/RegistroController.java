@@ -45,8 +45,7 @@ public class RegistroController {
             if (registrarUsuario(conn, usuario, contrasenia, rol)) {
                 mostrarAlerta(Alert.AlertType.INFORMATION, "Listo", "El registro se hizo correctamente");
 
-                //para iniciar solo
-                // inicioSesion(usuario, rol);
+                inicioSesion(usuario, rol);
             }
 
         } catch (SQLException e) {

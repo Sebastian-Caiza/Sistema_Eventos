@@ -1,25 +1,35 @@
 package org.example.sistemaeventos.model;
 
-import java.time.LocalDate;
-
 public class Evento {
 
     private int id;
     private String nombre;
-    private String lugar;
-    private LocalDate fecha;
-    private double precio;
+    private String tipo;
+    private String inicio;
+    private String fin;
+    private String fecha;
 
+    // Constructor vacío
     public Evento() {
     }
 
-    public Evento(int id, String nombre, String lugar, LocalDate fecha, double precio) {
+    public Evento(int id, String nombre, String tipo, String inicio, String fin, String fecha) {
         this.id = id;
         this.nombre = nombre;
-        this.lugar = lugar;
+        this.tipo = tipo;
+        this.inicio = inicio;
+        this.fin = fin;
         this.fecha = fecha;
-        this.precio = precio;
     }
+
+    public Evento(String nombre, String tipo, String inicio, String fin, String fecha) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.inicio = inicio;
+        this.fin = fin;
+        this.fecha = fecha;
+    }
+
 
     public int getId() {
         return id;
@@ -37,27 +47,35 @@ public class Evento {
         this.nombre = nombre;
     }
 
-    public String getLugar() {
-        return lugar;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setLugar(String lugar) {
-        this.lugar = lugar;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
-    public LocalDate getFecha() {
+    public String getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(String inicio) {
+        this.inicio = inicio;
+    }
+
+    public String getFin() {
+        return fin;
+    }
+
+    public void setFin(String fin) {
+        this.fin = fin;
+    }
+
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
     }
 }
