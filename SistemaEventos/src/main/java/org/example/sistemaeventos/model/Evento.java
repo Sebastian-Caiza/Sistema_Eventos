@@ -8,18 +8,19 @@ public class Evento {
     private String inicio;
     private String fin;
     private String fecha;
+    private String estado;
 
-    // Constructor vacío
     public Evento() {
     }
 
-    public Evento(int id, String nombre, String tipo, String inicio, String fin, String fecha) {
+    public Evento(int id, String nombre, String tipo, String inicio, String fin, String fecha, String estado) {
         this.id = id;
         this.nombre = nombre;
         this.tipo = tipo;
         this.inicio = inicio;
         this.fin = fin;
         this.fecha = fecha;
+        this.estado = estado;
     }
 
     public Evento(String nombre, String tipo, String inicio, String fin, String fecha) {
@@ -78,4 +79,9 @@ public class Evento {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
+
+    public String getEstado() {return estado;}
+
+    public void setEstado(String estado) {this.estado = estado;}
+
 }
