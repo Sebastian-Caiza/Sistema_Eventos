@@ -25,39 +25,12 @@ public class EventoDAO {
             ps.setString(5, nuevoEvento.getFecha());
 
             int filasAfectadas = ps.executeUpdate();
-            return filasAfectadas > 0; // Retorna true si se guardó con éxito
+            return filasAfectadas > 0;
 
         } catch (SQLException e) {
             System.out.println("Error al insertar evento: " + e.getMessage());
             return false;
         }
-    }
-
-    public List<Evento> listarEventos() {
-        List<Evento> lista = new ArrayList<>();
-        String sql = "SELECT * FROM eventos"; // Cambia 'eventos' por el nombre de tu tabla en PostgreSQL
-
-        try (Connection con = ConexionBD.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                Evento evento = new Evento(
-                        rs.getInt("id"), // Columna ID de tu BD
-                        rs.getString("nombre"),
-                        rs.getString("tipo"),
-                        rs.getString("inicio"),
-                        rs.getString("fin"),
-                        rs.getString("fecha")
-                );
-                lista.add(evento);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al listar eventos: " + e.getMessage());
-        }
-
-        return lista;
     }
 
     public boolean eliminar(int id) {
@@ -97,4 +70,51 @@ public class EventoDAO {
             return false;
         }
     }
+
+    public List<Evento> listarEventos() {
+        List<Evento> lista = new ArrayList<>();
+        String sql = "SELECT * FROM eventos";
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Evento evento = new Evento(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("tipo"),
+                        rs.getString("inicio"),
+                        rs.getString("fin"),
+                        rs.getString("fecha"),
+                        rs.getString("estado")
+                );
+                lista.add(evento);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al listar eventos: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    public boolean actualizarEstado(int id, String nuevoEstado) {
+        String sql = "UPDATE eventos SET estado = ? WHERE id = ?";
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nuevoEstado);
+            ps.setInt(2, id);
+
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar estado: " + e.getMessage());
+            return false;
+        }
+    }
+
 }
