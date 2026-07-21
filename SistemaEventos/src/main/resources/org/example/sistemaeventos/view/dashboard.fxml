@@ -4,50 +4,74 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="550.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sistemaeventos.controller.DashboardController">
+<BorderPane prefHeight="550.0" prefWidth="900.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sistemaeventos.controller.DashboardController">
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="15">
             <padding>
                 <Insets bottom="10" left="15" right="15" top="15" />
             </padding>
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Sistema de Eventos" />
+            <Label styleClass="label-titulo" text="Sistema de Eventos" />
             <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="lblUsuarioActivo" style="-fx-font-weight: bold;" text="-" />
             <Label fx:id="lblRolActivo" text="-" />
             <Button fx:id="btnReservas" onAction="#irAReservas" text="Reservas" />
-            <Button onAction="#cerrarSesion" text="Cerrar sesión" />
+            <Button onAction="#cerrarSesion" styleClass="button-salir" text="Cerrar sesión" />
         </HBox>
     </top>
 
     <left>
-        <VBox fx:id="panelFormulario" prefWidth="260" spacing="10" style="-fx-background-color: #B8E3D8;">
-            <padding>
-                <Insets bottom="15" left="15" right="15" top="15" />
-            </padding>
+        <VBox prefWidth="260" spacing="10">
 
-            <Label style="-fx-font-weight: bold;" text="Registrar / Editar Evento" />
+            <VBox fx:id="panelFormulario" spacing="10" styleClass="panel-formulario">
+                <padding>
+                    <Insets bottom="15" left="15" right="15" top="15" />
+                </padding>
 
-            <Label text="Nombre de evento" />
-            <TextField fx:id="txtNombre" />
+                <Label styleClass="label-subtitulo" text="Registrar / Editar Evento" />
 
-            <Label text="Tipo de evento" />
-            <TextField fx:id="txtTipo" />
+                <Label text="Nombre de evento" />
+                <TextField fx:id="txtNombre" />
 
-            <Label text="Horario inicio" />
-            <TextField fx:id="txtInicio" />
+                <Label text="Tipo de evento" />
+                <TextField fx:id="txtTipo" />
 
-            <Label text="Horario fin" />
-            <TextField fx:id="txtFin" />
+                <Label text="Horario inicio" />
+                <TextField fx:id="txtInicio" />
 
-            <Label text="Fecha" />
-            <DatePicker fx:id="dpFecha" />
+                <Label text="Horario fin" />
+                <TextField fx:id="txtFin" />
 
-            <HBox spacing="10">
-                <Button onAction="#registrar" text="Registrar" />
-                <Button onAction="#actualizar" text="Actualizar" />
-                <Button onAction="#eliminar" text="Eliminar" />
-            </HBox>
+                <Label text="Fecha" />
+                <DatePicker fx:id="dpFecha" />
+
+                <HBox spacing="10">
+                    <Button onAction="#registrar" text="Registrar" />
+                    <Button onAction="#actualizar" text="Actualizar" />
+                    <Button onAction="#eliminar" styleClass="button-cancelar" text="Eliminar" />
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="panelResumen" spacing="10" styleClass="panel-resumen">
+                <padding>
+                    <Insets bottom="15" left="15" right="15" top="15" />
+                </padding>
+
+                <Label styleClass="label-subtitulo" text="Resumen de Eventos" />
+
+                <Label text="Total de eventos:" />
+                <Label fx:id="lblTotalEventos" style="-fx-font-weight: bold;" text="0" />
+
+                <Label text="Pendientes:" />
+                <Label fx:id="lblPendientes" style="-fx-font-weight: bold;" text="0" />
+
+                <Label text="Confirmados:" />
+                <Label fx:id="lblConfirmados" style="-fx-font-weight: bold;" text="0" />
+
+                <Label text="Cancelados:" />
+                <Label fx:id="lblCancelados" style="-fx-font-weight: bold;" text="0" />
+            </VBox>
+
         </VBox>
     </left>
 
@@ -73,7 +97,7 @@
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
 
-            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Detalle del Evento" />
+            <Label styleClass="label-subtitulo" text="Detalle del Evento" />
 
             <Label style="-fx-font-weight: bold;" text="Nombre:" />
             <Label fx:id="lblNombre" text="-" wrapText="true" />
@@ -94,8 +118,8 @@
             <Label fx:id="lblEstado" text="-" />
 
             <HBox fx:id="panelAcciones" spacing="10">
-                <Button onAction="#confirmarEvento" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Confirmar" />
-                <Button onAction="#cancelarEvento" style="-fx-background-color: #E53935; -fx-text-fill: white;" text="Cancelar" />
+                <Button onAction="#confirmarEvento" styleClass="button-confirmar" text="Confirmar" />
+                <Button onAction="#cancelarEvento" styleClass="button-cancelar" text="Cancelar" />
             </HBox>
         </VBox>
     </right>

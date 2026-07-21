@@ -49,6 +49,12 @@ public class DashboardController {
     @FXML private HBox panelAcciones;
     @FXML private Button btnReservas;
 
+    @FXML private VBox panelResumen;
+    @FXML private Label lblTotalEventos;
+    @FXML private Label lblPendientes;
+    @FXML private Label lblConfirmados;
+    @FXML private Label lblCancelados;
+
     private final EventoDAO eventoDAO = new EventoDAO();
     private Evento eventoSeleccionado;
     private Usuario usuarioActivo;
@@ -85,13 +91,33 @@ public class DashboardController {
         btnReservas.setVisible(puedeGestionarReservas);
         btnReservas.setManaged(puedeGestionarReservas);
 
+        boolean esSupervisor = !esAdmin && !esRecepcionista;
+        panelResumen.setVisible(esSupervisor);
+        panelResumen.setManaged(esSupervisor);
+
         cargarEventos();
+
+        if (esSupervisor) {
+            cargarResumen();
+        }
     }
 
     private void cargarEventos() {
         List<Evento> lista = eventoDAO.listar();
         ObservableList<Evento> datos = FXCollections.observableArrayList(lista);
         tblEventos.setItems(datos);
+    }
+
+    private void cargarResumen() {
+        int total = eventoDAO.listar().size();
+        int pendientes = eventoDAO.contarPorEstado("pendiente");
+        int confirmados = eventoDAO.contarPorEstado("confirmado");
+        int cancelados = eventoDAO.contarPorEstado("cancelado");
+
+        lblTotalEventos.setText(String.valueOf(total));
+        lblPendientes.setText(String.valueOf(pendientes));
+        lblConfirmados.setText(String.valueOf(confirmados));
+        lblCancelados.setText(String.valueOf(cancelados));
     }
 
     private void mostrarDetalle(Evento evento) {

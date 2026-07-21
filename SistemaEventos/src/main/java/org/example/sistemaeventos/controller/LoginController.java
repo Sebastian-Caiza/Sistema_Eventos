@@ -63,20 +63,4 @@ public class LoginController {
             lblMensaje.setText("Error al cargar el sistema: " + e.getMessage());
         }
     }
-
-    @FXML
-    public void abrirRegistro() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/org/example/sistemaeventos/view/registro.fxml")
-            );
-            Parent root = loader.load();
-            Stage stage = (Stage) txtUsuario.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            lblMensaje.setText("Error al abrir el registro: " + e.getMessage());
-        }
-    }
 }

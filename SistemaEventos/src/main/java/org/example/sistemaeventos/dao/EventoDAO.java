@@ -85,7 +85,7 @@ public class EventoDAO implements CRUD<Evento> {
                         rs.getString("inicio"),
                         rs.getString("fin"),
                         rs.getString("fecha"),
-                        "Activo"
+                        rs.getString("estado")
                 );
                 lista.add(evento);
             }
@@ -112,5 +112,26 @@ public class EventoDAO implements CRUD<Evento> {
             System.out.println("Error al actualizar estado: " + e.getMessage());
             return false;
         }
+    }
+
+    public int contarPorEstado(String estado) {
+        String sql = "SELECT COUNT(*) FROM eventos WHERE estado = ?";
+
+        try (Connection con = ConexionBD.getInstancia().conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, estado);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al contar eventos por estado: " + e.getMessage());
+        }
+
+        return 0;
     }
 }
