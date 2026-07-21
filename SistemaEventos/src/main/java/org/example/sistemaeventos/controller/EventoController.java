@@ -54,7 +54,7 @@ public class EventoController {
     }
 
     private void cargarEventos() {
-        List<Evento> lista = eventoDAO.listarEventos();
+        List<Evento> lista = eventoDAO.listar();
         ObservableList<Evento> datos = FXCollections.observableArrayList(lista);
         tblEventos.setItems(datos);
     }

@@ -1,6 +1,6 @@
 package org.example.sistemaeventos.dao;
 
-import org.example.sistemaeventos.db.ConexionBD; // Tu clase de conexión
+import org.example.sistemaeventos.db.ConexionBD;
 import org.example.sistemaeventos.model.Evento;
 
 import java.sql.Connection;
@@ -10,9 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventoDAO {
+public class EventoDAO implements CRUD<Evento> {
 
-    public boolean insertar(Evento nuevoEvento) {
+    @Override
+    public void guardar(Evento nuevoEvento) {
         String sql = "INSERT INTO eventos (nombre, tipo, inicio, fin, fecha) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection con = ConexionBD.conectar();
@@ -24,32 +25,15 @@ public class EventoDAO {
             ps.setString(4, nuevoEvento.getFin());
             ps.setString(5, nuevoEvento.getFecha());
 
-            int filasAfectadas = ps.executeUpdate();
-            return filasAfectadas > 0;
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println("Error al insertar evento: " + e.getMessage());
-            return false;
         }
     }
 
-    public boolean eliminar(int id) {
-        String sql = "DELETE FROM eventos WHERE id = ?";
-
-        try (Connection con = ConexionBD.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            int filasAfectadas = ps.executeUpdate();
-            return filasAfectadas > 0;
-
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar evento: " + e.getMessage());
-            return false;
-        }
-    }
-
-    public boolean actualizar(Evento evento) {
+    @Override
+    public void actualizar(Evento evento) {
         String sql = "UPDATE eventos SET nombre = ?, tipo = ?, inicio = ?, fin = ?, fecha = ? WHERE id = ?";
 
         try (Connection con = ConexionBD.conectar();
@@ -62,16 +46,30 @@ public class EventoDAO {
             ps.setString(5, evento.getFecha());
             ps.setInt(6, evento.getId());
 
-            int filasAfectadas = ps.executeUpdate();
-            return filasAfectadas > 0;
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println("Error al actualizar evento: " + e.getMessage());
-            return false;
         }
     }
 
-    public List<Evento> listarEventos() {
+    @Override
+    public void eliminar(int id) {
+        String sql = "DELETE FROM eventos WHERE id = ?";
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar evento: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Evento> listar() {
         List<Evento> lista = new ArrayList<>();
         String sql = "SELECT * FROM eventos";
 
@@ -87,7 +85,7 @@ public class EventoDAO {
                         rs.getString("inicio"),
                         rs.getString("fin"),
                         rs.getString("fecha"),
-                        rs.getString("estado")
+                        "Activo"
                 );
                 lista.add(evento);
             }
@@ -108,13 +106,11 @@ public class EventoDAO {
             ps.setString(1, nuevoEstado);
             ps.setInt(2, id);
 
-            int filasAfectadas = ps.executeUpdate();
-            return filasAfectadas > 0;
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
             System.out.println("Error al actualizar estado: " + e.getMessage());
             return false;
         }
     }
-
 }

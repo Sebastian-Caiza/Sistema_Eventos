@@ -1,6 +1,5 @@
 package org.example.sistemaeventos.controller;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,15 +8,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.example.sistemaeventos.dao.CRUD;
 import org.example.sistemaeventos.dao.EventoDAO;
-import org.example.sistemaeventos.db.ConexionBD;
 import org.example.sistemaeventos.model.Evento;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
-
 
 public class MenuController {
 
@@ -39,7 +34,6 @@ public class MenuController {
     @FXML
     private TableView<Evento> tblEventos;
 
-
     @FXML
     private TableColumn<Evento, String> colNombre;
 
@@ -55,9 +49,8 @@ public class MenuController {
     @FXML
     private TableColumn<Evento, String> colFecha;
 
-    private EventoDAO eventoDAO = new EventoDAO();
+    private CRUD<Evento> eventoDAO = new EventoDAO();
 
-    // Lista observable para actualizar la tabla automáticamente
     private ObservableList<Evento> listaEventos = FXCollections.observableArrayList();
 
     @FXML
@@ -73,20 +66,18 @@ public class MenuController {
 
     private void mostrarEventos() {
         listaEventos.clear();
-        listaEventos.addAll(eventoDAO.listarEventos());
+        listaEventos.addAll(eventoDAO.listar());
         tblEventos.setItems(listaEventos);
     }
 
-
     @FXML
-    public void registrar(){
+    public void registrar() {
         String nombre = txtNombre.getText();
         String tipo = txtTipo.getText();
         String inicio = txtInicio.getText();
         String fin = txtFin.getText();
         LocalDate fecha = dpFecha.getValue();
 
-        // Validar que no estén vacíos
         if (nombre.isEmpty() || tipo.isEmpty() || fecha == null) {
             System.out.println("Por favor llena los campos obligatorios");
             return;
@@ -94,12 +85,11 @@ public class MenuController {
 
         Evento nuevoEvento = new Evento(nombre, tipo, inicio, fin, fecha.toString());
 
-        boolean exito = eventoDAO.insertar(nuevoEvento);
+        eventoDAO.guardar(nuevoEvento);
 
-        if (exito) {
-            limpiarCampos();
-            mostrarEventos();
-        }
+        limpiarCampos();
+        mostrarEventos();
+        System.out.println("Evento registrado con éxito.");
     }
 
     @FXML
@@ -107,20 +97,16 @@ public class MenuController {
         Evento seleccionado = tblEventos.getSelectionModel().getSelectedItem();
 
         if (seleccionado != null) {
-            if (eventoDAO.eliminar(seleccionado.getId())) {
-                mostrarEventos();
-                limpiarCampos();
-                tblEventos.getSelectionModel().clearSelection();
-                System.out.println("Evento eliminado con éxito.");
-            } else {
-                System.out.println("Error al intentar eliminar el evento.");
-            }
+            eventoDAO.eliminar(seleccionado.getId());
+
+            mostrarEventos();
+            limpiarCampos();
+            tblEventos.getSelectionModel().clearSelection();
+            System.out.println("Evento eliminado con éxito.");
         } else {
             System.out.println("Por favor, selecciona un evento de la tabla para eliminarlo.");
         }
     }
-
-
 
     @FXML
     public void actualizar() {
@@ -133,14 +119,12 @@ public class MenuController {
             seleccionado.setFin(txtFin.getText());
             seleccionado.setFecha(dpFecha.getValue() != null ? dpFecha.getValue().toString() : "");
 
-            if (eventoDAO.actualizar(seleccionado)) {
-                mostrarEventos();
-                limpiarCampos();
-                tblEventos.getSelectionModel().clearSelection();
-                System.out.println("Evento actualizado con éxito.");
-            } else {
-                System.out.println("No se pudo actualizar el evento.");
-            }
+            eventoDAO.actualizar(seleccionado);
+
+            mostrarEventos();
+            limpiarCampos();
+            tblEventos.getSelectionModel().clearSelection();
+            System.out.println("Evento actualizado con éxito.");
         } else {
             System.out.println("Por favor, selecciona un evento de la tabla para poder editarlo.");
         }

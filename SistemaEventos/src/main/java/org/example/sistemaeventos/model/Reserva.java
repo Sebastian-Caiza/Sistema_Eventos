@@ -48,4 +48,11 @@ public class Reserva {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+
+    @Override
+    public String toString() {
+        return "Reserva #" + getId() + " (Usuario ID: " + usuarioId + " | Evento ID: " + eventoId + ")";
+    }
+
+
 }
