@@ -21,7 +21,7 @@ public class RegistroController {
     @FXML
     private void initialize() {
         if (cmbRol != null) {
-            cmbRol.getItems().addAll("admin", "cliente");
+            cmbRol.getItems().addAll("admin", "recepcionista", "supervisor");
         }
     }
 
@@ -36,7 +36,7 @@ public class RegistroController {
             return;
         }
 
-        try (Connection conn = ConexionBD.conectar()) {
+        try (Connection conn = ConexionBD.getInstancia().conectar()) {
             if (existeUsuario(conn, usuario)) {
                 mostrarAlerta(Alert.AlertType.WARNING, "Usuario ya registrado", "ya existe");
                 return;
@@ -60,7 +60,7 @@ public class RegistroController {
             pst.setString(1, usuario);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt(1) > 0; // Retorna true si el conteo es mayor a 0
+                    return rs.getInt(1) > 0;
                 }
             }
         }
@@ -80,7 +80,6 @@ public class RegistroController {
     }
 
     private void inicioSesion(String usuario, String rol) {
-        //logica para camvbiar la pantalla
         System.out.println("Cargando menú para el usuario: " + usuario + " con rol: " + rol);
     }
 

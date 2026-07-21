@@ -6,6 +6,8 @@ public class Reserva {
     private int usuarioId;
     private int eventoId;
     private int cantidad;
+    private String nombreEvento;
+    private String nombreUsuario;
 
     public Reserva() {
     }
@@ -49,10 +51,24 @@ public class Reserva {
         this.cantidad = cantidad;
     }
 
+    public String getNombreEvento() {
+        return nombreEvento;
+    }
+
+    public void setNombreEvento(String nombreEvento) {
+        this.nombreEvento = nombreEvento;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
     @Override
     public String toString() {
         return "Reserva #" + getId() + " (Usuario ID: " + usuarioId + " | Evento ID: " + eventoId + ")";
     }
-
-
 }

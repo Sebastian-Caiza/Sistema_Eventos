@@ -8,12 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.sistemaeventos.db.ConexionBD;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.example.sistemaeventos.dao.UsuarioDAO;
+import org.example.sistemaeventos.model.Usuario;
 
 public class LoginController {
 
@@ -26,6 +22,8 @@ public class LoginController {
     @FXML
     private Label lblMensaje;
 
+    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
+
     @FXML
     public void iniciarSesion() {
 
@@ -37,54 +35,32 @@ public class LoginController {
             return;
         }
 
-        String rol = validarUsuario(usuario, clave);
+        Usuario usuarioEncontrado = usuarioDAO.buscarPorCredenciales(usuario, clave);
 
-        if (rol == null) {
+        if (usuarioEncontrado == null) {
             lblMensaje.setText("Usuario o contraseña incorrectos");
             return;
         }
 
-        if (rol.equals("admin")) {
-            abrirVentana("/org/example/sistemaeventos/view/menu_admin.fxml", "Gestión De Estudiantes");
-        } else if (rol.equals("recepcionista")) {
-            abrirVentana("/org/example/sistemaeventos/view/eventos.fxml", "Sistema de Eventos");
-        } else {
-            lblMensaje.setText("Rol de usuario no reconocido");
-        }
+        abrirDashboard(usuarioEncontrado);
     }
 
-    private String validarUsuario(String usuario, String clave) {
-        String sql = "SELECT rol FROM usuarios WHERE usuario = ? AND contrasenia = ?";
-
-        try (Connection con = ConexionBD.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, usuario);
-            ps.setString(2, clave);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("rol");
-                }
-            }
-
-        } catch (SQLException e) {
-            lblMensaje.setText("Error de conexión: " + e.getMessage());
-        }
-
-        return null;
-    }
-
-    private void abrirVentana(String rutaFxml, String titulo) {
+    private void abrirDashboard(Usuario usuario) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFxml));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/org/example/sistemaeventos/view/dashboard.fxml")
+            );
             Parent root = loader.load();
+
+            DashboardController controller = loader.getController();
+            controller.setUsuario(usuario);
+
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle(titulo);
+            stage.setTitle("Sistema de Eventos");
             stage.centerOnScreen();
         } catch (Exception e) {
-            lblMensaje.setText("Error al cargar la ventana: " + e.getMessage());
+            lblMensaje.setText("Error al cargar el sistema: " + e.getMessage());
         }
     }
 
