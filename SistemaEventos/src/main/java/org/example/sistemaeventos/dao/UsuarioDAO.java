@@ -14,16 +14,14 @@ public class UsuarioDAO implements CRUD<Usuario> {
 
     @Override
     public void guardar(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nombre, apellido, correo, contrasena, rol) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO usuarios (usuario, contrasenia, rol) VALUES (?, ?, ?)";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, usuario.getNombre());
-            ps.setString(2, usuario.getApellido());
-            ps.setString(3, usuario.getCorreo());
-            ps.setString(4, usuario.getContrasena());
-            ps.setString(5, usuario.getRol());
+            ps.setString(1, usuario.getUsuario());
+            ps.setString(2, usuario.getContrasenia());
+            ps.setString(3, usuario.getRol());
 
             ps.executeUpdate();
 
@@ -34,17 +32,15 @@ public class UsuarioDAO implements CRUD<Usuario> {
 
     @Override
     public void actualizar(Usuario usuario) {
-        String sql = "UPDATE usuarios SET nombre = ?, apellido = ?, correo = ?, contrasena = ?, rol = ? WHERE id = ?";
+        String sql = "UPDATE usuarios SET usuario = ?, contrasenia = ?, rol = ? WHERE id = ?";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, usuario.getNombre());
-            ps.setString(2, usuario.getApellido());
-            ps.setString(3, usuario.getCorreo());
-            ps.setString(4, usuario.getContrasena());
-            ps.setString(5, usuario.getRol());
-            ps.setInt(6, usuario.getId());
+            ps.setString(1, usuario.getUsuario());
+            ps.setString(2, usuario.getContrasenia());
+            ps.setString(3, usuario.getRol());
+            ps.setInt(4, usuario.getId());
 
             ps.executeUpdate();
 
@@ -57,7 +53,7 @@ public class UsuarioDAO implements CRUD<Usuario> {
     public void eliminar(int id) {
         String sql = "DELETE FROM usuarios WHERE id = ?";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
@@ -73,17 +69,15 @@ public class UsuarioDAO implements CRUD<Usuario> {
         List<Usuario> lista = new ArrayList<>();
         String sql = "SELECT * FROM usuarios";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Usuario usuario = new Usuario(
                         rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido"),
-                        rs.getString("correo"),
-                        rs.getString("contrasena"),
+                        rs.getString("usuario"),
+                        rs.getString("contrasenia"),
                         rs.getString("rol")
                 );
                 lista.add(usuario);
@@ -94,5 +88,32 @@ public class UsuarioDAO implements CRUD<Usuario> {
         }
 
         return lista;
+    }
+
+    public Usuario buscarPorCredenciales(String usuario, String contrasenia) {
+        String sql = "SELECT * FROM usuarios WHERE usuario = ? AND contrasenia = ?";
+
+        try (Connection con = ConexionBD.getInstancia().conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, usuario);
+            ps.setString(2, contrasenia);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Usuario(
+                            rs.getInt("id"),
+                            rs.getString("usuario"),
+                            rs.getString("contrasenia"),
+                            rs.getString("rol")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al validar usuario: " + e.getMessage());
+        }
+
+        return null;
     }
 }

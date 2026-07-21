@@ -1,28 +1,26 @@
 package org.example.sistemaeventos.model;
 
-
 public class Usuario extends Persona {
 
-    private String contrasena;
+    private String contrasenia;
     private String rol;
 
     public Usuario() {
         super();
     }
 
-    public Usuario(int id, String nombre, String apellido, String correo, String contrasena, String rol) {
-        // super() reutiliza los atributos de Persona
-        super(id, nombre, apellido, correo);
-        this.contrasena = contrasena;
+    public Usuario(int id, String usuario, String contrasenia, String rol) {
+        super(id, usuario);
+        this.contrasenia = contrasenia;
         this.rol = rol;
     }
 
-    public String getContrasena() {
-        return contrasena;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
     public String getRol() {
@@ -35,7 +33,6 @@ public class Usuario extends Persona {
 
     @Override
     public String toString() {
-        return getNombre() + " " + getApellido() + " (" + rol + ")";
+        return getUsuario() + " (" + rol + ")";
     }
-
 }

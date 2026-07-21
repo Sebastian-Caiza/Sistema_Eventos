@@ -16,7 +16,7 @@ public class EventoDAO implements CRUD<Evento> {
     public void guardar(Evento nuevoEvento) {
         String sql = "INSERT INTO eventos (nombre, tipo, inicio, fin, fecha) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, nuevoEvento.getNombre());
@@ -36,7 +36,7 @@ public class EventoDAO implements CRUD<Evento> {
     public void actualizar(Evento evento) {
         String sql = "UPDATE eventos SET nombre = ?, tipo = ?, inicio = ?, fin = ?, fecha = ? WHERE id = ?";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, evento.getNombre());
@@ -57,7 +57,7 @@ public class EventoDAO implements CRUD<Evento> {
     public void eliminar(int id) {
         String sql = "DELETE FROM eventos WHERE id = ?";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
@@ -73,7 +73,7 @@ public class EventoDAO implements CRUD<Evento> {
         List<Evento> lista = new ArrayList<>();
         String sql = "SELECT * FROM eventos";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -100,7 +100,7 @@ public class EventoDAO implements CRUD<Evento> {
     public boolean actualizarEstado(int id, String nuevoEstado) {
         String sql = "UPDATE eventos SET estado = ? WHERE id = ?";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, nuevoEstado);

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="550.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sistemaeventos.controller.DashboardController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15">
+            <padding>
+                <Insets bottom="10" left="15" right="15" top="15" />
+            </padding>
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Sistema de Eventos" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblUsuarioActivo" style="-fx-font-weight: bold;" text="-" />
+            <Label fx:id="lblRolActivo" text="-" />
+            <Button fx:id="btnReservas" onAction="#irAReservas" text="Reservas" />
+            <Button onAction="#cerrarSesion" text="Cerrar sesión" />
+        </HBox>
+    </top>
+
+    <left>
+        <VBox fx:id="panelFormulario" prefWidth="260" spacing="10" style="-fx-background-color: #B8E3D8;">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+
+            <Label style="-fx-font-weight: bold;" text="Registrar / Editar Evento" />
+
+            <Label text="Nombre de evento" />
+            <TextField fx:id="txtNombre" />
+
+            <Label text="Tipo de evento" />
+            <TextField fx:id="txtTipo" />
+
+            <Label text="Horario inicio" />
+            <TextField fx:id="txtInicio" />
+
+            <Label text="Horario fin" />
+            <TextField fx:id="txtFin" />
+
+            <Label text="Fecha" />
+            <DatePicker fx:id="dpFecha" />
+
+            <HBox spacing="10">
+                <Button onAction="#registrar" text="Registrar" />
+                <Button onAction="#actualizar" text="Actualizar" />
+                <Button onAction="#eliminar" text="Eliminar" />
+            </HBox>
+        </VBox>
+    </left>
+
+    <center>
+        <TableView fx:id="tblEventos" prefHeight="400.0">
+            <columns>
+                <TableColumn fx:id="colNombre" prefWidth="140" text="Nombre" />
+                <TableColumn fx:id="colTipo" prefWidth="90" text="Tipo" />
+                <TableColumn fx:id="colInicio" prefWidth="80" text="Inicio" />
+                <TableColumn fx:id="colFin" prefWidth="80" text="Fin" />
+                <TableColumn fx:id="colFecha" prefWidth="90" text="Fecha" />
+                <TableColumn fx:id="colEstado" prefWidth="100" text="Estado" />
+            </columns>
+            <BorderPane.margin>
+                <Insets left="15" right="15" />
+            </BorderPane.margin>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox fx:id="panelDetalle" prefWidth="250" spacing="10">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Detalle del Evento" />
+
+            <Label style="-fx-font-weight: bold;" text="Nombre:" />
+            <Label fx:id="lblNombre" text="-" wrapText="true" />
+
+            <Label style="-fx-font-weight: bold;" text="Tipo:" />
+            <Label fx:id="lblTipo" text="-" />
+
+            <Label style="-fx-font-weight: bold;" text="Hora inicio:" />
+            <Label fx:id="lblInicio" text="-" />
+
+            <Label style="-fx-font-weight: bold;" text="Hora fin:" />
+            <Label fx:id="lblFin" text="-" />
+
+            <Label style="-fx-font-weight: bold;" text="Fecha:" />
+            <Label fx:id="lblFecha" text="-" />
+
+            <Label style="-fx-font-weight: bold;" text="Estado:" />
+            <Label fx:id="lblEstado" text="-" />
+
+            <HBox fx:id="panelAcciones" spacing="10">
+                <Button onAction="#confirmarEvento" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Confirmar" />
+                <Button onAction="#cancelarEvento" style="-fx-background-color: #E53935; -fx-text-fill: white;" text="Cancelar" />
+            </HBox>
+        </VBox>
+    </right>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="10" />
+            </padding>
+            <Button onAction="#actualizarLista" text="Actualizar lista" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

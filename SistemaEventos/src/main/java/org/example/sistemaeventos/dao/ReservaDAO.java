@@ -16,7 +16,7 @@ public class ReservaDAO implements CRUD<Reserva> {
     public void guardar(Reserva reserva) {
         String sql = "INSERT INTO reservas (usuario_id, evento_id, cantidad) VALUES (?, ?, ?)";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, reserva.getUsuarioId());
@@ -34,7 +34,7 @@ public class ReservaDAO implements CRUD<Reserva> {
     public void actualizar(Reserva reserva) {
         String sql = "UPDATE reservas SET usuario_id = ?, evento_id = ?, cantidad = ? WHERE id = ?";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, reserva.getUsuarioId());
@@ -53,7 +53,7 @@ public class ReservaDAO implements CRUD<Reserva> {
     public void eliminar(int id) {
         String sql = "DELETE FROM reservas WHERE id = ?";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
@@ -69,7 +69,7 @@ public class ReservaDAO implements CRUD<Reserva> {
         List<Reserva> lista = new ArrayList<>();
         String sql = "SELECT * FROM reservas";
 
-        try (Connection con = ConexionBD.conectar();
+        try (Connection con = ConexionBD.getInstancia().conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -85,6 +85,38 @@ public class ReservaDAO implements CRUD<Reserva> {
 
         } catch (SQLException e) {
             System.out.println("Error al listar reservas: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    public List<Reserva> listarConDetalle() {
+        List<Reserva> lista = new ArrayList<>();
+        String sql = "SELECT r.id, r.usuario_id, r.evento_id, r.cantidad, "
+                + "e.nombre AS nombre_evento, u.usuario AS nombre_usuario "
+                + "FROM reservas r "
+                + "JOIN eventos e ON r.evento_id = e.id "
+                + "JOIN usuarios u ON r.usuario_id = u.id "
+                + "ORDER BY r.id";
+
+        try (Connection con = ConexionBD.getInstancia().conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Reserva reserva = new Reserva(
+                        rs.getInt("id"),
+                        rs.getInt("usuario_id"),
+                        rs.getInt("evento_id"),
+                        rs.getInt("cantidad")
+                );
+                reserva.setNombreEvento(rs.getString("nombre_evento"));
+                reserva.setNombreUsuario(rs.getString("nombre_usuario"));
+                lista.add(reserva);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al listar reservas con detalle: " + e.getMessage());
         }
 
         return lista;
