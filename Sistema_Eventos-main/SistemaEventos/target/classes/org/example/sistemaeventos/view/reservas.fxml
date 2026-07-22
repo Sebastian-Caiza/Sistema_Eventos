@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="500.0" prefWidth="750.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sistemaeventos.controller.ReservaController">
+
+    <top>
+        <Label styleClass="label-titulo" text="Reservas de Eventos">
+            <BorderPane.margin>
+                <Insets bottom="10" left="15" top="15" />
+            </BorderPane.margin>
+        </Label>
+    </top>
+
+    <center>
+        <TableView fx:id="tblReservas" prefHeight="350.0">
+            <columns>
+                <TableColumn fx:id="colEvento" prefWidth="220" text="Evento" />
+                <TableColumn fx:id="colUsuario" prefWidth="150" text="Registrada por" />
+                <TableColumn fx:id="colCantidad" prefWidth="100" text="Cantidad" />
+            </columns>
+            <BorderPane.margin>
+                <Insets left="15" right="15" />
+            </BorderPane.margin>
+        </TableView>
+    </center>
+
+    <bottom>
+        <VBox spacing="10">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="10" />
+            </padding>
+
+            <Label styleClass="label-subtitulo" text="Nueva reserva" />
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Evento:" />
+                <ComboBox fx:id="cmbEvento" prefWidth="220" />
+                <Label text="Cantidad:" />
+                <TextField fx:id="txtCantidad" prefWidth="80" />
+                <Button onAction="#registrarReserva" text="Registrar" />
+                <Button onAction="#eliminarReserva" styleClass="button-cancelar" text="Eliminar seleccionada" />
+            </HBox>
+
+            <Button onAction="#volverDashboard" styleClass="button-salir" text="Volver" />
+        </VBox>
+    </bottom>
+
+</BorderPane>
