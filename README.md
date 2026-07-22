@@ -98,3 +98,35 @@ SELECT * FROM reservas;
 </details>
 
 ## Instalación y ejecución
+
+1. Clonar el repositorio:
+   
+git clone https://github.com/Sebastian-Caiza/Sistema_Eventos.git
+
+2. Crear la base de datos en PostgreSQL y ejecutar
+3. Configurar las credenciales de conexión en `db/ConexionBD.java` (URL, usuario y contraseña de PostgreSQL).
+4. Abrir el proyecto en IntelliJ IDEA y ejecutar `Launcher.java`.
+
+### Ejecutable
+
+También puede ejecutarse directamente el archivo `.exe`, sin necesidad de tener el IDE ni JavaFX instalados por separado.
+
+## 🖼️ Capturas de pantalla
+
+- Login
+  
+<img width="456" height="515" alt="image" src="https://github.com/user-attachments/assets/7bdb3c19-9d36-4e50-b093-858161b51741" />
+
+-Dashboard por rol
+
+<img width="1122" height="720" alt="image" src="https://github.com/user-attachments/assets/310a4af6-657c-4bd4-81e2-7e7c06f3e010" />
+
+<img width="1123" height="717" alt="image" src="https://github.com/user-attachments/assets/01efc7f3-9338-42ce-ac19-e8b2e409e303" />
+
+## Video demostrativo
+
+<< enlace al video >>
+
+## 📄 Licencia
+
+Proyecto académico — Escuela Politécnica Nacional, Programación Orientada a Objetos, 2026-A.
