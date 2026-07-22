@@ -21,7 +21,7 @@ Cada usuario accede a una única pantalla de dashboard que se adapta dinámicame
 | **Recepcionista** | Operativo | Confirmar/cancelar eventos · Gestionar reservas |
 | **Supervisor (Reportes)** | Solo lectura | Ver resumen y estadísticas de eventos |
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 - Java 17
 - JavaFX (interfaz gráfica)
@@ -36,7 +36,7 @@ Cada usuario accede a una única pantalla de dashboard que se adapta dinámicame
 
 <img width="811" height="263" alt="image" src="https://github.com/user-attachments/assets/ec1ab17a-cba4-451a-b8b4-bd150896f957" />
 
-## 🗄️ Base de datos
+## Base de datos
 
 3 tablas relacionadas en PostgreSQL:
 
@@ -111,7 +111,7 @@ git clone https://github.com/Sebastian-Caiza/Sistema_Eventos.git
 
 También puede ejecutarse directamente el archivo `.exe`, sin necesidad de tener el IDE ni JavaFX instalados por separado.
 
-## 🖼️ Capturas de pantalla
+## Capturas de pantalla
 
 - Login
   
@@ -127,6 +127,6 @@ También puede ejecutarse directamente el archivo `.exe`, sin necesidad de tener
 
 << enlace al video >>
 
-## 📄 Licencia
+## Licencia
 
 Proyecto académico — Escuela Politécnica Nacional, Programación Orientada a Objetos, 2026-A.
