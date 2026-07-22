@@ -21,7 +21,6 @@ import org.example.sistemaeventos.model.Reserva;
 import org.example.sistemaeventos.model.Usuario;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ReservaController {
 
@@ -37,17 +36,12 @@ public class ReservaController {
     private final EventoDAO eventoDAO = new EventoDAO();
 
     private Usuario usuarioActivo;
-    private Reserva reservaSeleccionada;
 
     @FXML
     public void initialize() {
         colEvento.setCellValueFactory(new PropertyValueFactory<>("nombreEvento"));
         colUsuario.setCellValueFactory(new PropertyValueFactory<>("nombreUsuario"));
         colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-
-        tblReservas.getSelectionModel().selectedItemProperty().addListener(
-                (obs, anterior, seleccionada) -> reservaSeleccionada = seleccionada
-        );
     }
 
     public void setUsuario(Usuario usuario) {
@@ -100,7 +94,9 @@ public class ReservaController {
 
     @FXML
     private void eliminarReserva() {
-        if (reservaSeleccionada == null) {
+        Reserva seleccionada = tblReservas.getSelectionModel().getSelectedItem();
+
+        if (seleccionada == null) {
             mostrarAlerta(Alert.AlertType.WARNING, "Selecciona una reserva de la tabla primero.");
             return;
         }
@@ -110,9 +106,10 @@ public class ReservaController {
         confirmacion.setHeaderText(null);
         confirmacion.setContentText("¿Seguro que deseas eliminar esta reserva?");
 
-        Optional<ButtonType> resultado = confirmacion.showAndWait();
-        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            reservaDAO.eliminar(reservaSeleccionada.getId());
+        ButtonType resultado = confirmacion.showAndWait().orElse(null);
+
+        if (resultado == ButtonType.OK) {
+            reservaDAO.eliminar(seleccionada.getId());
             cargarReservas();
         }
     }

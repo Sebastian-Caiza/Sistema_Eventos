@@ -98,6 +98,7 @@
             </padding>
 
             <Label styleClass="label-subtitulo" text="Detalle del Evento" />
+            <Button onAction="#verDetalle" text="Ver Detalle" />
 
             <Label style="-fx-font-weight: bold;" text="Nombre:" />
             <Label fx:id="lblNombre" text="-" wrapText="true" />

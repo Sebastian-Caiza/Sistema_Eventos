@@ -17,7 +17,6 @@ import org.example.sistemaeventos.model.Usuario;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public class DashboardController {
 
@@ -56,7 +55,6 @@ public class DashboardController {
     @FXML private Label lblCancelados;
 
     private final EventoDAO eventoDAO = new EventoDAO();
-    private Evento eventoSeleccionado;
     private Usuario usuarioActivo;
 
     @FXML
@@ -67,10 +65,6 @@ public class DashboardController {
         colFin.setCellValueFactory(new PropertyValueFactory<>("fin"));
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
-
-        tblEventos.getSelectionModel().selectedItemProperty().addListener(
-                (obs, anterior, seleccionado) -> mostrarDetalle(seleccionado)
-        );
     }
 
     public void setUsuario(Usuario usuario) {
@@ -81,17 +75,18 @@ public class DashboardController {
 
         boolean esAdmin = "admin".equalsIgnoreCase(usuario.getRol());
         boolean esRecepcionista = "recepcionista".equalsIgnoreCase(usuario.getRol());
+        boolean esSupervisor = !esAdmin && !esRecepcionista;
 
         panelFormulario.setVisible(esAdmin);
         panelFormulario.setManaged(esAdmin);
 
         panelAcciones.setVisible(esRecepcionista);
         panelAcciones.setManaged(esRecepcionista);
+
         boolean puedeGestionarReservas = esAdmin || esRecepcionista;
         btnReservas.setVisible(puedeGestionarReservas);
         btnReservas.setManaged(puedeGestionarReservas);
 
-        boolean esSupervisor = !esAdmin && !esRecepcionista;
         panelResumen.setVisible(esSupervisor);
         panelResumen.setManaged(esSupervisor);
 
@@ -120,33 +115,33 @@ public class DashboardController {
         lblCancelados.setText(String.valueOf(cancelados));
     }
 
-    private void mostrarDetalle(Evento evento) {
-        eventoSeleccionado = evento;
+    @FXML
+    private void verDetalle() {
+        Evento seleccionado = tblEventos.getSelectionModel().getSelectedItem();
 
-        if (evento == null) {
-            lblNombre.setText("-");
-            lblTipo.setText("-");
-            lblInicio.setText("-");
-            lblFin.setText("-");
-            lblFecha.setText("-");
-            lblEstado.setText("-");
+        if (seleccionado == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Selecciona un evento de la tabla primero.");
             return;
         }
 
-        lblNombre.setText(evento.getNombre());
-        lblTipo.setText(evento.getTipo());
-        lblInicio.setText(evento.getInicio());
-        lblFin.setText(evento.getFin());
-        lblFecha.setText(evento.getFecha());
-        lblEstado.setText(evento.getEstado());
+        lblNombre.setText(seleccionado.getNombre());
+        lblTipo.setText(seleccionado.getTipo());
+        lblInicio.setText(seleccionado.getInicio());
+        lblFin.setText(seleccionado.getFin());
+        lblFecha.setText(seleccionado.getFecha());
+        lblEstado.setText(seleccionado.getEstado());
 
         if ("admin".equalsIgnoreCase(usuarioActivo.getRol())) {
-            txtNombre.setText(evento.getNombre());
-            txtTipo.setText(evento.getTipo());
-            txtInicio.setText(evento.getInicio());
-            txtFin.setText(evento.getFin());
-            dpFecha.setValue(evento.getFecha() != null && !evento.getFecha().isEmpty()
-                    ? LocalDate.parse(evento.getFecha()) : null);
+            txtNombre.setText(seleccionado.getNombre());
+            txtTipo.setText(seleccionado.getTipo());
+            txtInicio.setText(seleccionado.getInicio());
+            txtFin.setText(seleccionado.getFin());
+
+            if (seleccionado.getFecha() != null && !seleccionado.getFecha().isEmpty()) {
+                dpFecha.setValue(LocalDate.parse(seleccionado.getFecha()));
+            } else {
+                dpFecha.setValue(null);
+            }
         }
     }
 
@@ -171,8 +166,36 @@ public class DashboardController {
     }
 
     @FXML
+    private void actualizar() {
+        Evento seleccionado = tblEventos.getSelectionModel().getSelectedItem();
+
+        if (seleccionado == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Selecciona un evento de la tabla primero.");
+            return;
+        }
+
+        seleccionado.setNombre(txtNombre.getText());
+        seleccionado.setTipo(txtTipo.getText());
+        seleccionado.setInicio(txtInicio.getText());
+        seleccionado.setFin(txtFin.getText());
+
+        if (dpFecha.getValue() != null) {
+            seleccionado.setFecha(dpFecha.getValue().toString());
+        } else {
+            seleccionado.setFecha("");
+        }
+
+        eventoDAO.actualizar(seleccionado);
+
+        limpiarCampos();
+        cargarEventos();
+    }
+
+    @FXML
     private void eliminar() {
-        if (eventoSeleccionado == null) {
+        Evento seleccionado = tblEventos.getSelectionModel().getSelectedItem();
+
+        if (seleccionado == null) {
             mostrarAlerta(Alert.AlertType.WARNING, "Selecciona un evento de la tabla primero.");
             return;
         }
@@ -180,33 +203,15 @@ public class DashboardController {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Confirmar eliminación");
         confirmacion.setHeaderText(null);
-        confirmacion.setContentText("¿Seguro que deseas eliminar el evento \"" + eventoSeleccionado.getNombre() + "\"?");
+        confirmacion.setContentText("¿Seguro que deseas eliminar el evento \"" + seleccionado.getNombre() + "\"?");
 
-        Optional<ButtonType> resultado = confirmacion.showAndWait();
-        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            eventoDAO.eliminar(eventoSeleccionado.getId());
+        ButtonType resultado = confirmacion.showAndWait().orElse(null);
+
+        if (resultado == ButtonType.OK) {
+            eventoDAO.eliminar(seleccionado.getId());
             limpiarCampos();
             cargarEventos();
         }
-    }
-
-    @FXML
-    private void actualizar() {
-        if (eventoSeleccionado == null) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Selecciona un evento de la tabla primero.");
-            return;
-        }
-
-        eventoSeleccionado.setNombre(txtNombre.getText());
-        eventoSeleccionado.setTipo(txtTipo.getText());
-        eventoSeleccionado.setInicio(txtInicio.getText());
-        eventoSeleccionado.setFin(txtFin.getText());
-        eventoSeleccionado.setFecha(dpFecha.getValue() != null ? dpFecha.getValue().toString() : "");
-
-        eventoDAO.actualizar(eventoSeleccionado);
-
-        limpiarCampos();
-        cargarEventos();
     }
 
     @FXML
@@ -220,12 +225,14 @@ public class DashboardController {
     }
 
     private void cambiarEstado(String nuevoEstado) {
-        if (eventoSeleccionado == null) {
+        Evento seleccionado = tblEventos.getSelectionModel().getSelectedItem();
+
+        if (seleccionado == null) {
             mostrarAlerta(Alert.AlertType.WARNING, "Selecciona un evento de la tabla primero.");
             return;
         }
 
-        boolean exito = eventoDAO.actualizarEstado(eventoSeleccionado.getId(), nuevoEstado);
+        boolean exito = eventoDAO.actualizarEstado(seleccionado.getId(), nuevoEstado);
 
         if (exito) {
             cargarEventos();
@@ -256,22 +263,6 @@ public class DashboardController {
         }
     }
 
-    private void limpiarCampos() {
-        txtNombre.clear();
-        txtTipo.clear();
-        txtInicio.clear();
-        txtFin.clear();
-        dpFecha.setValue(null);
-    }
-
-    private void mostrarAlerta(Alert.AlertType tipo, String mensaje) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle("Aviso");
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
     @FXML
     private void irAReservas() {
         try {
@@ -290,5 +281,21 @@ public class DashboardController {
         } catch (Exception e) {
             mostrarAlerta(Alert.AlertType.ERROR, "Error al abrir reservas: " + e.getMessage());
         }
+    }
+
+    private void limpiarCampos() {
+        txtNombre.clear();
+        txtTipo.clear();
+        txtInicio.clear();
+        txtFin.clear();
+        dpFecha.setValue(null);
+    }
+
+    private void mostrarAlerta(Alert.AlertType tipo, String mensaje) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle("Aviso");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }
