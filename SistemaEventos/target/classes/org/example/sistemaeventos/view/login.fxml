@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sistemaeventos.controller.LoginController">
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sistemaeventos.controller.LoginController" stylesheets="@../styles.css">
 
     <VBox alignment="CENTER" prefHeight="385.0" prefWidth="367.0" spacing="15">
 
@@ -11,13 +11,11 @@
 
         <Label text="Inicio de Sesión" />
 
-        <TextField fx:id="txtUsuario" maxWidth="150.0" promptText="Usuario o correo" />
+        <TextField fx:id="txtUsuario" maxWidth="150.0" promptText="Usuario" />
 
         <PasswordField fx:id="txtPassword" maxWidth="150.0" promptText="Contraseña" />
 
         <Button maxWidth="100.0" onAction="#iniciarSesion" prefWidth="200" text="Ingresar" />
-
-        <Button maxWidth="100.0" onAction="#abrirRegistro" prefWidth="200" text="Registrarse" />
 
         <Label fx:id="lblMensaje" />
 
